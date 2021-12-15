@@ -42,15 +42,16 @@ class App extends React.Component {
         this.cref.current.style.top = parseFloat(this.cref.current.style.top) + e.movementY + "px";
       }
     });
-    // document.addEventListener("keyup", (e) => {
-    //   if ((e.which || e.keyCode) === 82) {
-    //     let t = {...this.state}
-    //     t.x = this.defaultX;
-    //     t.y = this.defaultY;
-    //     t.zoom = this.defaultZoom;
-    //     this.setState(t);
-    //   }
-    // })
+    document.addEventListener("keyup", (e) => {
+      if (e.ctrlKey && e.key === "\\") {
+        // let t = {...this.state}
+        // t.x = this.defaultX;
+        // t.y = this.defaultY;
+        // t.zoom = this.defaultZoom;
+        // this.setState(t);
+        navigator.clipboard.writeText("map = " + JSON.stringify(map).replaceAll("},{", "},\n{"));
+      }
+    })
     document.addEventListener("click", (e) => {
       if (this.draggedThisClick) {
         this.draggedThisClick = false;
@@ -189,7 +190,7 @@ class FilterDialog extends React.Component {
   constructor(props) {
     super(props);
 
-    this.types = ["geo", "charm", "ability", "grub", "bench", "cocoon", "map", "stag", "mask", "vessel", "rancid-egg", "dream-warrior", "whispering-root", "journal", "key", "idol", "tram", "hotsprings", "npc", "pale-ore"];
+    this.types = ["geo", "charm", "ability", "boss", "grub", "bench", "cocoon", "map", "stag", "mask", "vessel", "rancid-egg", "warrior-dream", "whispering-root", "journal", "key", "charm-notch", "idol", "tram", "hotsprings", "shop", "npc", "pale-ore", "soul", "lore", "update"];
     this.trefs = [];
     for (let i = 0; i < this.types.length; i++) {
       this.trefs.push(React.createRef());
@@ -603,6 +604,10 @@ function reactDialog(contentClass, props) {
   return content;
 }
 
+
+// for (let i = 0; i < map.rooms.length; i++) {
+//   delete map.rooms[i].notes;
+// }
 
 
 const appContainer = document.querySelector('#app-container');
