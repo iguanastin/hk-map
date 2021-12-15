@@ -402,7 +402,7 @@ map = {"width":4167,"height":2735,"pins":["assets/map/pins/pin_grub_location.png
 {"name":"Fungus2_02","src":"assets/map/rooms/mapped/Fungus2_02.png","x":1204,"y":1410,"exits":[{"to":"Fungus2_01:1","note":"","x":0.975603217158177,"y":0.5940094189016603,"direction":"right"}],"region":"Queens Station","notes":[{"pos":{"x":0.5710455764075067,"y":0.6099736590038314},"id":"Fungus2_02.bench","type":"bench","note":"","pin":"assets/map/pins/pin_bench.png"},
 {"pos":{"x":0.31742627345844504,"y":0.5410081417624522},"id":"Fungus2_02.stag","type":"stag","note":"","pin":"assets/map/pins/pin_stag_station.png"}]},
 {"name":"Fungus2_34","src":"assets/map/rooms/mapped/Fungus2_34.png","x":1230,"y":1385,"exits":[{"to":"Fungus2_01:2","note":"","x":0.9589552238805971,"y":0.7248115756541524,"direction":"right"}],"region":"Queens Station","notes":[{"pos":{"x":0.6146540027137042,"y":0.3169617463026166},"id":"Fungus2_34.update","type":"update","note":"","pin":"assets/map/pins/Grimm_flame_pin.png"},
-{"pos":{"x":0.3331071913161465,"y":0.6457444539249146},"id":"Fungus2_34.update","type":"update","note":"","pin":"assets/map/pins/Grimm_flame_pin.png"}]},
+{"pos":{"x":0.3331071913161465,"y":0.6457444539249146},"id":"Fungus2_34.update2","type":"update","note":"","pin":"assets/map/pins/Grimm_flame_pin.png"}]},
 {"name":"Fungus3_26","src":"assets/map/rooms/mapped/Fungus3_26.png","x":1537,"y":977,"exits":[{"to":"Fungus3_27:1","note":"","x":0.05545536519386835,"y":0.9143227767329393,"direction":"left"},
 {"to":"Fungus2_33:1","note":"","x":0.951307484220018,"y":0.36636888769478776,"direction":"right"},
 {"to":"Crossroads_35:1","note":"","x":0.6771866546438232,"y":0.009978674099946265,"direction":"up"},
