@@ -11,7 +11,12 @@ class App extends React.Component {
     this.defaultY = -50;
     this.defaultZoom = 1;
 
-    this.state = { filter: { types: [] }, x: this.defaultX, y: this.defaultY, zoom: this.defaultZoom };
+    let typeFilter = getCookie("type_filter");
+    typeFilter = typeFilter === "" ? [] : typeFilter.split(",");
+    let beastFilter = getCookie("beast_filter");
+    beastFilter = beastFilter === "" ? [] : beastFilter.split(",");
+
+    this.state = { filter: { types: typeFilter, beasts: beastFilter }, x: this.defaultX, y: this.defaultY, zoom: this.defaultZoom };
 
     this.cref = React.createRef();
 
@@ -137,8 +142,8 @@ class Pin extends React.Component {
   }
 
   render() {
-    return e("img", { hidden: this.props.app.isPinFiltered(this.props.note), title: this.props.note.id, className: "map-pin", src: this.props.note.pin, style: { left: this.props.x, top: this.props.y }, onClick: () => {
-      reactDialog(PinDialog, { pin: this.props.note, room: this.props.room, success: () => {
+    return e("img", { hidden: this.props.app.isPinFiltered(this.props.note), title: this.props.note.id, className: "map-pin", src: this.props.note.pin, style: { left: this.props.x, top: this.props.y }, onClick: (e) => {
+      if (e.ctrlKey) reactDialog(PinDialog, { pin: this.props.note, room: this.props.room, success: () => {
         this.forceUpdate();
       } });
     } });
@@ -190,44 +195,86 @@ class FilterDialog extends React.Component {
   constructor(props) {
     super(props);
 
-    this.types = ["geo", "charm", "ability", "boss", "grub", "bench", "cocoon", "map", "stag", "mask", "vessel", "rancid-egg", "warrior-dream", "whispering-root", "journal", "key", "charm-notch", "idol", "tram", "hotsprings", "shop", "npc", "pale-ore", "soul", "lore", "update"];
+    this.types = ["geo", "charm", "ability", "boss", "quest", "grub", "bench", "cocoon", "map", "stag", "mask", "vessel", "rancid-egg", "warrior-dream", "whispering-root", "journal", "key", "charm-notch", "idol", "tram", "hotsprings", "shop", "npc", "pale-ore", "soul", "lore", "update"];
     this.trefs = [];
     for (let i = 0; i < this.types.length; i++) {
       this.trefs.push(React.createRef());
+    }
+
+    this.erefs = [];
+    for (let i = 0; i < bestiary.length; i++) {
+      this.erefs.push(React.createRef());
     }
   }
 
   render() {
     let filter = this.props.app.state.filter;
 
-    let el = [];
+    let types = [];
     for (let i = 0; i < this.types.length; i++) {
       let type = this.types[i];
       let name = type.charAt(0).toUpperCase() + type.slice(1).replaceAll("-", " ");
-      el.push(e("div", { key: type }, e("input", { ref: this.trefs[i], type: "checkbox", defaultChecked: !filter.types.includes(type) }), name));
+      types.push(e("div", { key: type, className: "d-filter-check", onClick: () => {
+        this.trefs[i].current.checked = !this.trefs[i].current.checked;
+      } }, e("input", { ref: this.trefs[i], type: "checkbox", defaultChecked: !filter.types.includes(type), onClick: (e) => e.stopPropagation() }), name));
+    }
+
+    let beasts = [];
+    for (let i = 0; i < bestiary.length; i++) {
+        const beast = bestiary[i];
+        beasts.push(e("div", { key: beast.id, className: "d-filter-check", onClick: () => {
+          this.erefs[i].current.checked = !this.erefs[i].current.checked;
+        } }, e("input", { ref: this.erefs[i], type: "checkbox", defaultChecked: !filter.beasts.includes(beast.id), onClick: (e) => e.stopPropagation() }), beast.name));
     }
 
     return e("div", { className: "dialog" },
       e("div", { className: "d-title" }, "Filters"),
-      e("div", { style: { marginBottom: "25px" } }, e("div", { className: "d-button button", onClick: () => {
-        for (let i = 0; i < this.trefs.length; i++) {
-          this.trefs[i].current.checked = true;
-        }
-      } }, "All"), e("div", { className: "d-button button", onClick: () => {
-        for (let i = 0; i < this.trefs.length; i++) {
-          this.trefs[i].current.checked = false;
-        }
-      } }, "None")),
-      e("div", { style: { marginBottom: "25px" } }, el),
+      e("div", { className: "d-filter-box" },
+        e("div", { className: "d-filter-type" },
+          "Points of Interest",
+          e("div", { className: "d-filter-allnone" }, e("div", { className: "d-button button", onClick: () => {
+            for (let i = 0; i < this.trefs.length; i++) {
+              this.trefs[i].current.checked = true;
+            }
+          } }, "All"), e("div", { className: "d-button button", onClick: () => {
+            for (let i = 0; i < this.trefs.length; i++) {
+              this.trefs[i].current.checked = false;
+            }
+          } }, "None")),
+          e("div", { className: "d-filter-list" }, types),
+        ),
+        e("div", { className: "d-filter-type" },
+          "Enemies",
+          e("div", { className: "d-filter-allnone" }, e("div", { className: "d-button button", onClick: () => {
+            for (let i = 0; i < this.erefs.length; i++) {
+              this.erefs[i].current.checked = true;
+            }
+          } }, "All"), e("div", { className: "d-button button", onClick: () => {
+            for (let i = 0; i < this.erefs.length; i++) {
+              this.erefs[i].current.checked = false;
+            }
+          } }, "None")),
+          e("div", { className: "d-filter-list" }, beasts),
+        )
+      ),
       e("div", { className: "d-buttons"},
         e("div", { className: "d-button button", onClick: () => {
-          // TODO apply filter to app
           filter.types = [];
           for (let i = 0; i < this.types.length; i++) {
             if (!this.trefs[i].current.checked) {
               filter.types.push(this.types[i]);
             }
           }
+          setCookie("type_filter", filter.types.join(","), 365);
+
+          filter.beasts = [];
+          for (let i = 0; i < bestiary.length; i++) {
+            if (!this.erefs[i].current.checked) {
+              filter.beasts.push(bestiary[i].id);
+            }
+          }
+          setCookie("beast_filter", filter.beasts.join(","), 365);
+
           this.props.d.close();
           this.props.app.forceUpdate();
         } }, "Apply"),
@@ -602,6 +649,29 @@ function reactDialog(contentClass, props) {
   ReactDOM.render(content, d.root);
 
   return content;
+}
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
 
 

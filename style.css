@@ -214,6 +214,38 @@ textarea, input[type="text"] {
   height: 90%;
   overflow: hidden;
 }
+.d-filter-box {
+  max-height: 70vh;
+  margin-bottom: 25px;
+  display: flex;
+}
+.d-filter-type {
+  display: flex;
+  flex-direction: column;
+}
+.d-filter-type:not(:first-child) {
+  border-left: solid 2px #444;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+.d-filter-list {
+  overflow-y: auto;
+  flex: 1;
+}
+.d-filter-check {
+  cursor: pointer;
+  user-select: none;
+}
+.d-filter-allnone {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.d-filter-check:hover {
+  background-color: #333;
+}
+.d-filter-check > input {
+  margin-right: 5px;
+}
 
 
 .dialog-tint {
