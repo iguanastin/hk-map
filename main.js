@@ -146,6 +146,10 @@ class Pin extends React.Component {
       if (e.ctrlKey) reactDialog(PinDialog, { pin: this.props.note, room: this.props.room, success: () => {
         this.forceUpdate();
       } });
+      else if (e.shiftKey) reactDialog(ConfirmDialog, { title: "Delete pin", msg: "Permanently delete '" + this.props.note.id + "'?", ok: () => {
+        this.props.room.notes.splice(this.props.room.notes.indexOf(this.props.note), 1);
+        this.props.app.forceUpdate();
+      } });
     } });
   }
 }
@@ -183,7 +187,7 @@ class Exit extends React.Component {
         }
       }
       this.props.roomD.props.d.close();
-      reactDialog(RoomDialog, { room: to, app: this.props.app, exit: to.exits[index] });
+      reactDialog(RoomDialog, { room: to, app: this.props.app, exit: to.exits ? to.exits[index] : null });
     } });
   }
 }
