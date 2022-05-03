@@ -27,7 +27,7 @@ class App extends React.Component {
     this.mouseDown = false;
     this.draggedThisClick = false;
     this.dragging = false;
-    document.addEventListener("mouseup", () => {
+    document.addEventListener("pointerup", () => {
       if (this.dragging) {
         let t = {...this.state};
         t.x = parseFloat(this.cref.current.style.left);
@@ -37,7 +37,7 @@ class App extends React.Component {
       this.mouseDown = false;
       this.dragging = false;
     });
-    document.addEventListener("mousemove", (e) => {
+    document.addEventListener("pointermove", (e) => {
       if (this.mouseDown) {
         this.dragging = true;
         this.draggedThisClick = true;
