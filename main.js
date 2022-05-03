@@ -126,7 +126,7 @@ class MapRoom extends React.Component {
     }
 
     return e("div", { className: "map-item", style: { left: this.props.x, top: this.props.y } },
-      e("img", { src: this.props.room.src, title: this.props.room.name, style: { width: this.props.scale * this.state.width + "px" }, onLoad: (e) => {
+      e("img", { src: this.props.room.src, loading: "lazy", title: this.props.room.name, style: { width: this.props.scale * this.state.width + "px" }, onLoad: (e) => {
         this.setState({ width: e.target.width, height: e.target.height });
       }, onClick: () => {
         reactDialog(RoomDialog, { room: this.props.room, app: this.props.app });
